@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import joblib 
+import joblib # FOR SAVING MY MODEL AS A BINARY FILE
 from matplotlib.colors import ListedColormap
 import os
 
@@ -9,20 +9,14 @@ plt.style.use("fivethirtyeight")
 
 def prepare_data(df):
   X = df.drop("y", axis=1)
-
   y = df["y"]
-
   return X, y
-
-
 
 def save_model(model, filename):
   model_dir = "models"
   os.makedirs(model_dir, exist_ok=True) # ONLY CREATE IF MODEL_DIR DOESN"T EXISTS
   filePath = os.path.join(model_dir, filename) # model/filename
   joblib.dump(model, filePath)
-
-
 
 def save_plot(df, file_name, model):
   def _create_base_plot(df):
@@ -52,4 +46,16 @@ def save_plot(df, file_name, model):
     plt.xlim(xx1.min(), xx1.max())
     plt.ylim(xx2.min(), xx2.max())
 
-    plt.plot()  
+    plt.plot()
+
+
+
+  X, y = prepare_data(df)
+
+  _create_base_plot(df)
+  _plot_decision_regions(X, y, model)
+
+  plot_dir = "plots"
+  os.makedirs(plot_dir, exist_ok=True) # ONLY CREATE IF MODEL_DIR DOESN"T EXISTS
+  plotPath = os.path.join(plot_dir, file_name) # model/filename
+  plt.savefig(plotPath)
